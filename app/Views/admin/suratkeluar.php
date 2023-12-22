@@ -68,12 +68,12 @@
                         <span id="tgl_surat_error" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label for="tipe_surat">Tipe Surat</label>
+                        <label for="tipe_surat">Upload File?</label>
                         <select class="form-control selectric" name="tipeSurat" id="tipeSurat" onchange="getTipeSurat(this)">
-                            <option value="">-- Pilih --</option>
-                            <option value="Surat_Undangan">Surat Undangan</option>
-                            <option value="Surat_Keterangan_Siswa">Surat Keterangan Siswa</option>
-                            <option value="Upload">Upload File</option>
+                            <option value="">Pilih</option>
+                            <option value="No">No</option>
+                            <!-- <option value="Surat_Keterangan_Siswa">Surat Keterangan Siswa</option> -->
+                            <option value="Upload">Yes</option>
                         </select>
                         <span id="tipe_surat_error" class="text-danger"></span>
                     </div>
@@ -250,6 +250,10 @@
             disableUndangan();
         } else if (selected == 'Surat_Undangan') {
             suratUndangan();
+            disableUploadFile();
+            disableKeterangan();
+        } else if (selected == 'no') {
+            disableUndangan();
             disableUploadFile();
             disableKeterangan();
         }

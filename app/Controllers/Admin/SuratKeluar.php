@@ -227,6 +227,12 @@ class SuratKeluar extends BaseController
                     'tempat' => 'required',
                 ]);
                 $tipe = 'Surat Undangan';
+            } else {
+                $input = $this->validate([
+                    'no_surat'  => 'required|is_unique[surat_keluar.no_surat]',
+                    'no_agenda' => 'required|is_unique[surat_keluar.no_agenda]',
+                    'tgl_surat' => 'required',
+                ]);
             }
             if (!$input) {
                 $this->output['errors'] = $validation->getErrors();
@@ -254,16 +260,30 @@ class SuratKeluar extends BaseController
                     $fileName = $file->getName();
                     $file->move('uploads');
                 }
-                $data = [
-                    'no_surat' => $no_surat,
-                    'no_agenda'  => $no_agenda,
-                    'tanggal_surat' => $tgl_surat,
-                    'kepada' => $kepada,
-                    'perihal' => $perihal,
-                    'file' => $fileName,
-                    'created_by' => $user_id
-                ];
-                $save = $suratKeluarModel->ignore(true)->insert($data);
+                if ($tipeSurat == 'upload') {
+                    $data = [
+                        'no_surat' => $no_surat,
+                        'no_agenda'  => $no_agenda,
+                        'tanggal_surat' => $tgl_surat,
+                        'kepada' => $kepada,
+                        'perihal' => $perihal,
+                        'file' => $fileName,
+                        'created_by' => $user_id
+                    ];
+                    $save = $suratKeluarModel->ignore(true)->insert($data);
+                } else {
+                    $data = [
+                        'no_surat' => $no_surat,
+                        'no_agenda'  => $no_agenda,
+                        'tanggal_surat' => $tgl_surat,
+                        // 'kepada' => $kepada,
+                        // 'perihal' => $perihal,
+                        // 'file' => $fileName,
+                        'created_by' => $user_id
+                    ];
+                    $save = $suratKeluarModel->ignore(true)->insert($data);
+                }
+
                 $id_surat = $suratKeluarModel->getInsertID();
                 $transaksi = [
                     'kode_transaksi' => $no_agenda,
